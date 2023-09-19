@@ -1,0 +1,236 @@
+#- Comments -#
+
+# a comment --1231.. '' "" #
+
+#
+a
+multiline 
+comment
+#
+
+#- Var Declaration and Assignments -#
+
+# python like dynamic typing #
+
+a = 5;
+b = "a string";
+c, d = 3 * 5, "another string";  # multiple assignment #
+
+#- Function Declarations -#
+
+funct @foo()
+	@print("inside foo");
+	a = a * 5; # can return nothing #
+endfunct
+
+# parameters defined by var ids, dynamically typed #
+funct @bar(a, b)
+	c = a * b**2;
+	return a**2 * b, c; # can return multiple values #
+endfunct
+
+# functions can be declared inside functions locally #
+funct @a(x)
+	funct @b(c)
+		return c**2;
+	endfunct
+	return @b(x);
+endfunct
+
+#- Function Calls -#
+
+x, y = @bar(a, b);
+@print(x);
+@print(y);
+
+
+#- If Statements -#
+
+if (a > b)
+	@print("a>b");
+else
+	@print("a<=b");
+endif
+
+if (False)
+	if (a > b)
+		@print("a>b");
+	else
+		@print("a<=b");
+	endif
+elif (True)
+	@print("in elif");
+else
+	# never gets here #
+endif
+
+#- Loops -#
+
+# for loop #
+
+# prints "123456789" #
+for (i in 1:1:10)
+	@print(i);
+endfor
+
+# works with single element #
+# prints "5" #
+for (i in 5)
+	@print(i);
+endfor
+
+# while loop #
+
+# prints "12345678910" #
+temp = True;
+i = 0;
+while (temp)
+	i = i + 1;
+	if (i > 10)
+		temp = False;
+	endif
+	@print(i);
+endwhile
+
+#- Loops Inside Loops -#
+
+# prints "j is 1jis 3j = 1j = 3" #
+for (i in ["j is ", "j = "])
+	for (j in 1:2:4)
+		@print(i + j);
+	endfor
+endfor
+
+# prints "123233" #
+for (i in 1:1:3)
+	j = i;
+	while (j < 3)
+		j = j + 1;
+		@print(j);
+	endwhile
+endfor
+
+# prints "012122" #
+i = 0;
+while (i < 3)
+	for (j in i:1:3)
+		@print(j);
+	endfor
+endwhile
+
+# prints "248" #
+i = 2;
+while (i < 3)
+	j = 2;
+	while (j < 10)
+		@print(j);
+		j = j * i;
+	endwhile
+	i = i + 1;
+endwhile
+
+#- Function Declarations Inside Loops -#
+
+# prints "149" #
+for (i in 1:1:4)
+	funct @foo(j)
+		return j**2;
+	endfunct
+	@print(@foo(i));
+endfor
+
+#- Expressions -#
+
+#- List Expressions #
+
+# list declaration #
+list = [a, "a", a**b, True, a<b];
+temp = 1:2:5; # evaluates to [1,3] #
+
+# list concatenation #
+list1 = [1, 2]
+list2 = list1 + [3] # evaluates to [1, 2, 3] #
+
+# list indexing #
+a = list[0]; # evaluates to a #
+b = list[list1]; # evaluates to ["a", a**b] #
+c = list[0:1:2]; # evaluates to [a, "a"] #
+
+# list inside list #
+a = [[1,2], [3,4]];
+# a[1][1] evaluates to 4 #
+
+#- String Expressions -#
+
+a = "Hello";
+b = a + " world!"; # "Hello world!" #
+c = @substr(a, 1, 4); # "ell" #
+d = @to_str(123); # "123" #
+e = d + ".5"; # "123.5" #
+f = @to_num(d); # evaluates to integer 123 #
+g = @to_num(f); # evaluates to float 123.5 #
+
+#- Arithmetic Expressions -# 
+
+a = (-1) / ((1 + 3)**b**(c * d) - @bar(2, 3) / 2.5);
+
+#- Logical Expressions -#
+
+p = !(p | (True & q) | a < b**2)
+
+#- Relational Expressions -#
+
+p = a < b | a <= b | a == b | a >= b | a > b; 
+
+
+#- Primitive Functions -#
+
+# timer #
+
+start = @time();
+@foo();
+end = @time();
+elapsed = end - start;
+
+@print("time elapsed: " + elapsed);
+
+# reading and listing sensor names connected to device #
+
+list = @sensors_list();
+@print(list);
+
+# read value from sensor #
+
+# sensor names can be set arbitrarily for each device #
+temp1 = @read_sendor("Temp-1");
+temp2 = @read_sendor("Temp-2");
+humidity = @read_sensor("Humidity");
+
+# internet connection #
+
+connection = @check_connection();
+result = @try_connection();
+
+# flipping actuator swtiches #
+
+@flip_switch(2);
+@set_switch(3, True);
+
+# communication with other devices #
+
+@shout(123, "hello"); # shouts hello to channel 123 #
+messages = @listen(124); # receives the list of strings in channel 124's buffer " #
+
+# printing values #
+
+@print(a);
+@print(3 + 5);
+@print(b > 2);
+@print("hello");
+
+# string related functions #
+
+stra = @to_str(a);
+a = @to_num(stra);
+ell = @substr("hello", 1, 4);
+
